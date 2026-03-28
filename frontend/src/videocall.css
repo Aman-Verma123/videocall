@@ -1,0 +1,114 @@
+
+
+.videocall-container {
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+background: linear-gradient(135deg, #667eea, #764ba2);
+font-family: Arial, Helvetica, sans-serif;
+}
+
+.videocall-card {
+background: white;
+padding: 30px;
+border-radius: 15px;
+box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+text-align: center;
+width: 90%;
+max-width: 800px;
+}
+
+.title {
+font-size: 24px;
+font-weight: bold;
+margin-bottom: 10px;
+}
+
+.user-id {
+background: #f3f3f3;
+padding: 10px;
+border-radius: 8px;
+margin-bottom: 15px;
+word-break: break-all;
+}
+
+.input-box {
+padding: 12px;
+width: 100%;
+border-radius: 8px;
+border: 1px solid #ddd;
+outline: none;
+margin-bottom: 15px;
+}
+
+.call-btn {
+background: #4CAF50;
+color: white;
+padding: 12px 25px;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+font-weight: bold;
+transition: 0.3s ease;
+}
+
+.call-btn:hover {
+background: #45a049;
+}
+
+.accept-btn {
+background: #2196F3;
+color: white;
+padding: 10px 20px;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+margin-top: 10px;
+}
+
+.accept-btn:hover {
+background: #1976D2;
+}
+
+.video-container {
+display: flex;
+gap: 20px;
+justify-content: center;
+margin-top: 25px;
+flex-wrap: wrap;
+}
+
+.video-box {
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+.video {
+width: 320px;
+height: 240px;
+border-radius: 12px;
+background: black;
+border: 3px solid #eee;
+}
+
+.video-label {
+margin-top: 8px;
+font-weight: bold;
+}
+
+.incoming-call {
+background: #fff3cd;
+padding: 10px;
+border-radius: 8px;
+margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+.video {
+width: 100%;
+height: auto;
+}
+}

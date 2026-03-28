@@ -1,11 +1,9 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import SimplePeer from "simple-peer";
 import { io } from "socket.io-client";
+import "./videoCall.css";
 
-// const socket = io("http://localhost:5000");
-
-
+// Backend URL (Render)
 const socket = io("https://videocall-backend-fwz2.onrender.com");
 
 const VideoCall = () => {
@@ -22,7 +20,7 @@ const [caller, setCaller] = useState("");
 const [callerSignal, setCallerSignal] = useState(null);
 
 
-// Get Camera + Mic
+// Get Camera + Socket Events
 useEffect(() => {
 
 navigator.mediaDevices
@@ -41,11 +39,13 @@ myVideo.current.srcObject = stream;
 });
 
 
+// My Socket ID
 socket.on("connect", () => {
 setMyId(socket.id);
 });
 
 
+// Incoming Call
 socket.on("incoming-call", (data) => {
 
 setReceivingCall(true);
@@ -55,8 +55,17 @@ setCallerSignal(data.signal);
 });
 
 
+// Call Accepted
+socket.on("call-accepted", (signal) => {
+
+peerRef.current.signal(signal);
+
+});
+
+
 return () => {
 socket.off("incoming-call");
+socket.off("call-accepted");
 };
 
 }, []);
@@ -70,43 +79,38 @@ initiator: true,
 trickle: false,
 stream: stream,
 
- config:{
-  iceServers:[
-   {
-    urls:"stun:stun.l.google.com:19302"
-   }
-  ]
- }
-
-});
-
-
-// Generate Offer
-peerRef.current.on("signal", (data) => {
-
-socket.emit("call-user", {
-userToCall: userId,
-signal: data,
-from: myId,
-});
-
-});
-
-
-// Receive Video
-peerRef.current.on("stream", (remoteStream) => {
-
-if (userVideo.current) {
-userVideo.current.srcObject = remoteStream;
+config: {
+iceServers: [
+{
+urls: "stun:stun.l.google.com:19302"
+},
+{
+urls: "stun:global.stun.twilio.com:3478"
+}
+]
 }
 
 });
 
 
-// Call Accepted
-socket.on("call-accepted", (signal) => {
+// Send Offer
+peerRef.current.on("signal", (data) => {
 
-peerRef.current.signal(signal);
+socket.emit("call-user", {
+userToCall: userId,
+signal: data,
+from: myId
+});
+
+});
+
+
+// Receive Remote Video
+peerRef.current.on("stream", (remoteStream) => {
+
+if (userVideo.current) {
+userVideo.current.srcObject = remoteStream;
+}
 
 });
 
@@ -123,14 +127,17 @@ initiator: false,
 trickle: false,
 stream: stream,
 
+config: {
+iceServers: [
+{
+urls: "stun:stun.l.google.com:19302"
+},
+{
+urls: "stun:global.stun.twilio.com:3478"
+}
+]
+}
 
- config:{
-  iceServers:[
-   {
-    urls:"stun:stun.l.google.com:19302"
-   }
-  ]
- }
 });
 
 
@@ -139,13 +146,13 @@ peerRef.current.on("signal", (data) => {
 
 socket.emit("accept-call", {
 signal: data,
-to: caller,
+to: caller
 });
 
 });
 
 
-// Receive Video
+// Receive Remote Video
 peerRef.current.on("stream", (remoteStream) => {
 
 if (userVideo.current) {
@@ -162,32 +169,35 @@ peerRef.current.signal(callerSignal);
 
 
 return (
-<div style={{ textAlign: "center" }}>
+<div className="videocall-container">
 
-<h2>Your ID: {myId}</h2>
+<div className="videocall-card">
+
+<h2 className="title">Video Calling App</h2>
+
+<div className="user-id">
+Your ID: {myId}
+</div>
 
 <input
+className="input-box"
 placeholder="Enter User ID"
 onChange={(e) => setUserId(e.target.value)}
-style={{ padding: "10px", width: "250px" }}
 />
 
-<br />
-<br />
-
-<button onClick={callUser} style={{ padding: "10px" }}>
-Call
+<button className="call-btn" onClick={callUser}>
+Call User
 </button>
 
 
 {receivingCall && (
-<div>
+<div className="incoming-call">
 
 <h3>Incoming Call...</h3>
 
 <button
+className="accept-btn"
 onClick={acceptCall}
-style={{ padding: "10px", marginTop: "10px" }}
 >
 Accept Call
 </button>
@@ -196,29 +206,40 @@ Accept Call
 )}
 
 
-<div style={{ marginTop: "30px" }}>
+<div className="video-container">
 
+<div className="video-box">
 <video
 ref={myVideo}
 autoPlay
 muted
 playsInline
-style={{ width: "300px", marginRight: "10px" }}
+className="video"
 />
 
+<span className="video-label">My Video</span>
+</div>
 
+
+<div className="video-box">
 <video
 ref={userVideo}
 autoPlay
 playsInline
-style={{ width: "300px" }}
+className="video"
 />
+
+<span className="video-label">User Video</span>
+</div>
+
+
+</div>
 
 </div>
 
 </div>
 );
+
 };
 
 export default VideoCall;
-
