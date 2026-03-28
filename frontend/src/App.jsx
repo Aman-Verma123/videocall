@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import SimplePeer from "simple-peer";
 import { io } from "socket.io-client";
-import "./videoCall.css";
+import "./videocall.css";
 
 // Backend URL (Render)
 const socket = io("https://videocall-backend-fwz2.onrender.com");
