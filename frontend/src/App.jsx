@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import SimplePeer from "simple-peer";
+// import SimplePeer from "simple-peer";
+import SimplePeer from "simple-peer/simplepeer.min.js";
 import { io } from "socket.io-client";
 import "./videocall.css";
 
