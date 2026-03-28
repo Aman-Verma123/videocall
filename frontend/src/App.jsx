@@ -69,6 +69,15 @@ peerRef.current = new SimplePeer({
 initiator: true,
 trickle: false,
 stream: stream,
+
+ config:{
+  iceServers:[
+   {
+    urls:"stun:stun.l.google.com:19302"
+   }
+  ]
+ }
+
 });
 
 
@@ -113,6 +122,15 @@ peerRef.current = new SimplePeer({
 initiator: false,
 trickle: false,
 stream: stream,
+
+
+ config:{
+  iceServers:[
+   {
+    urls:"stun:stun.l.google.com:19302"
+   }
+  ]
+ }
 });
 
 
