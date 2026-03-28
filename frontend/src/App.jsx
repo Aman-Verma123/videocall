@@ -3,7 +3,10 @@ import React, { useEffect, useRef, useState } from "react";
 import SimplePeer from "simple-peer";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000");
+// const socket = io("http://localhost:5000");
+
+
+const socket = io("https://videocall-backend-fwz2.onrender.com");
 
 const VideoCall = () => {
 
